@@ -1,0 +1,209 @@
+{% extends 'tour/base.html' %}
+{% load humanize %}
+{% block main_area %}
+
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">상품 조회</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">코드, 한글 , 날짜 조회</li>
+            </ol>
+            <div>
+                전체선택<input type="checkbox" name="yoil" onclick="javascript:yoil()">
+                월<input type="checkbox" name='yoil_1' value="1">
+                화<input type="checkbox" name='yoil_2' value="2">
+                수<input type="checkbox" name='yoil_3' value="3">
+                목<input type="checkbox" name='yoil_4' value="4">
+                금<input type="checkbox" name='yoil_5' value="5">
+                토<input type="checkbox" name='yoil_6' value="6">
+                일<input type="checkbox" name='yoil_7' value="7">
+
+            </div>
+        <div>
+            <div class="row">
+                <div class="col">
+                    <div class="card card-body">    
+                        <form action="{% url 'tour:item_lv' %}" method="POST">
+                            {% csrf_token %}
+                        <div style="display:flex;justify-content:between-around;align-items:center;">
+                            {{form.as_table}}
+                            <button class="btn btn-primary" type="submit" name="search">
+                            조회
+                            </button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="card card-body"> 
+                           
+                        <script language="javascript">
+                   
+                            function yoil(){
+                            
+                            if(document.all['yoil'].checked == true)
+                            {
+                            for(i=1; i<8;i++){
+                            document.all['yoil_'+i].checked = true;
+                            }
+                            }
+                            else if(document.all['yoil'].checked == false)
+                            {
+                            for(i=1; i<8;i++){
+                            document.all['yoil_'+i].checked = false;
+                            }
+                            }
+                            return;
+                            }
+            
+                            </script>
+
+
+                <ul>
+                    {% for bc in basiccode %}
+                     <li>   기본코드: {{ bc.name }} : {{bc.title}} {{bc.query_code}}
+                       
+                        <ul>
+                            {% for item in bc.touritem_basiccode.iterator %}
+                            <li>상품코드 : {{item.item_code}}</li>
+                            {% endfor %}
+                        </ul>
+                        
+                     </li>
+                    {% endfor %}
+                </ul>
+ 
+                    </div>
+                </div>
+            </div>
+        
+
+
+    <div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        자바스크립트 테이블
+    </div>
+    <h3><a href="/tour/new/">상품 등록 tour/new/</a></h3>
+    <div class="card-body">
+        
+        
+        {% if object_list %}
+            {{object_list.count}} 개 상품이 있습니다
+        {% endif %}
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>상품명</th>
+                        <th>기간</th>
+                        <th>출발일/도착일</th>
+                        <th>항공</th>
+                        <th>출/도착</th>
+                        <th>상품가</th>
+
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in object_list %}
+                    <tr>
+                        <td><a href="{% url 'tour:tour_detail' p.pk %}"> {{ p.title }}<br>{{p.basiccode_fk}}{{p.air_code}}{{p.suffix_code}}</a></td>
+             <td>{{p.period}} 일</td>
+                        <td>
+                            {{ p.d_date1 | date:'Y-m-d (D)' | cut:"요일"}}<br>
+                            {{ p.r_date2 | date:'Y-m-d (D)' | cut:"요일"}}
+                        </td>
+                        <td>{{p.airline|upper}}</td>
+                        <td>
+                            {{p.d_city1}}-{{p.d_city2}}
+                        </td>
+
+                        <td>{{p.price | intcomma }}</td>
+
+                        <td>
+                            <a href="{% url 'tour:tour_edit' p.pk %}">수정</a>
+                            <a href="{% url 'tour:tour_delete' p.pk %}">삭제</a>
+                            <a href="{% url 'tour:tour_copy' p.pk %}">복사</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+            <form action="" method="POST">
+                            {% csrf_token %}
+<div class="float-right">
+    선택 상품(을) 
+    <button type="submit" class="btn btn-danger" name="chk_delete">삭제</button>
+    공유일정 사용 {{list_form.iti_check}} 
+    공유블럭 사용{{list_form.air_check}}
+    <!-- <input type="checkbox" name="iti_check" value='1' id="iti_check"/>
+    <input type="checkbox" name="air_check" value='1' id="air_check"/> -->
+    <button type="submit" class="btn btn-warning" name="chk_modify">수정</button>
+
+</div>
+
+<div>
+    {% for checkbox in yoil_form.yoil %}
+        {{checkbox}}
+    {% endfor %}
+</div>
+<!-- <div class="btn-group" data-toggle="buttons">  -->
+<div>
+    {% for checkbox in yoil_form.yoil %}
+        <!-- <label class="btn btn-warning"> -->
+        {{ checkbox.tag }} {{ checkbox.choice_label }}
+        <!-- </label> -->
+    {% endfor %}
+</div>
+
+            <table class="table">
+                <colgroup>
+                    <col width="5%">
+                    <col width="15%">
+                    <col width="10%">
+                    <col width="10%">
+                    <col width="20%">
+                    <col width="20%">
+                    <col width="10%">
+                </colgroup>
+                <tr class="table table-dark table-hover text-center align-middle">
+                    <th>선택</th>
+                    <th>코드</th>
+                    <th>공유<br>일정</th>
+                    <th>공유<br>블록</th>
+                    <th>출발일</th>
+                    <th>도착일</th>
+                    <th>period</th>
+            </tr>
+                <tbody>
+                    
+                    {% for p in object_list %}
+                    <tr>
+                        <td class="text-center">
+                            <!-- {{list_form.chk_pk}} -->
+                            <input type="checkbox" class="form-control-input" id="{{p.pk}}" name="chk_pk" value="{{p.pk}}">
+                        </td>
+                        <td class="text-center">
+                            <a href="{% url 'tour:tour_detail' p.pk %}">{{p.pk}}</a></td>
+                        <td class="text-center">
+                            <input type="checkbox" disabled {% if p.share_iti_chk %}checked {% endif %} class="form-control-input" id="iti_{{p.pk}}" name="chk_iti" value="{{p.share_iti_chk}}">
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" disabled {% if p.share_air_chk %}checked {% endif %} class="form-control-input" id="air_{{p.pk}}" name="chk_air" value="{{p.share_air_chk}}">
+                        </td>
+                        <td class="text-left">{{p.d_date1}}</td>
+                        <td class="text-left">{{p.r_date2}}</td>
+                        <td class="text-left">{{p.period}}</td>
+                    </tr>
+                    {% endfor %}
+                </form>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

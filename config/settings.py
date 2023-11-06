@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookmark',
+    'tour',
+    'markdownx',
+    'website',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +125,39 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '_media')
+
+# TINYMCE_JS_URL = os.path.join(STATIC_URL, "js/tinymce/tinymce.min.js")
+# TINYMCE_JS_ROOT = os.path.join(STATIC_ROOT, "js/tinymce")
+TINYMCE_SPELLCHECKER = False
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": "500px",
+    "width": "auto",
+    "menubar": "file edit view insert format table tools help",
+    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "
+    "fullscreen insertdatetime media table paste code help wordcount spellchecker",
+    "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
+    "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
+    "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
+    "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "
+    "a11ycheck ltr rtl | showcomments addcomment code",
+    "custom_undo_redo_levels": 10,
+    "autosave_ask_before_unload": 'true',
+    "autosave_interval": '30s',
+    "autosave_prefix": 'tinymce-autosave-{path}{query}-{id}-',
+    "autosave_restore_when_empty": 'false',
+    "autosave_retention": '2m',
+    "language": "ko_KR",  # To force a specific language instead of the Django current language.
+}
+
+from django.contrib.messages import constants as messages_constants
+
+MESSAGE_TAGS = {
+    messages_constants.DEBUG: 'secondary',
+    messages_constants.ERROR: 'danger'
+}
