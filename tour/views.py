@@ -10,6 +10,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from datetime import timedelta
 
 # from tour.forms import *
+from tour.forms import SearchForm
 from .models import *
 from django.db.models import Q
 from django.db.models.functions import Concat
