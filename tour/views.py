@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 # from django.utils.text import slugify
 from datetime import timedelta
 
-# from tour.forms import *
+from tour.forms import *
 # from tour.forms import SearchForm, ListForm, YoilForm
 from .models import *
 from django.db.models import Q
