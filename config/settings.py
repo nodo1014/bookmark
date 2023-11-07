@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'bookmark',
     'tour',
     'website',
-    'django_extensions',
     'crispy_forms',
     'crispy_bootstrap5',
     'markdownx',
